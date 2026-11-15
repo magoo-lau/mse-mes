@@ -1,0 +1,19 @@
+# ==================== 应用配置（Nacos 配置中心经 spring.config.import 接入） ====================
+# SCA 2025.1 起 bootstrap 装载路径已移除，统一走 config-data 机制（optional:nacos:<dataId>）。
+# 生效优先级：声明靠后者优先——服务专属 Data ID（mse-mes.yaml）放最后。
+# 原始配置留档（项目本地）：mse-modules/mse-mes/docker/nacos/config/mse-mes.yaml
+# 统一写入脚本（复用框架区，CONFIG_DIR 指向本工程留档目录）：
+#   CONFIG_DIR=<仓库根>/mse-modules/mse-mes/docker/nacos/config sh mse-framework/docker/nacos/init-configs.sh
+# 运行期配置修改：Nacos 控制台 http://localhost:18080（Namespace=public，Group=DEFAULT_GROUP）
+spring:
+  application:
+    name: mse-mes
+  config:
+    import:
+      - optional:nacos:mse-micro-common.yaml
+      - optional:nacos:mse-micro-db-biz.yaml
+      - optional:nacos:mse-micro-dubbo.yaml
+      - optional:nacos:mse-mes.yaml
+  cloud:
+    nacos:
+      server-addr: ${MSE_NACOS_ADDR:localhost:8848}

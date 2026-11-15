@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>vip.mseapp</groupId>
+        <artifactId>mse-mes</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>mes-service</artifactId>
+    <name>mes-service</name>
+    <description>MES 制造执行系统——业务积木（纯 jar，无 main，SPI 自装配）：引入 jar 即得 Controller/Service/Mapper 全部能力</description>
+
+    <dependencies>
+        <!-- 自有契约积木：对外 RPC 契约的实现方 -->
+        <dependency>
+            <groupId>vip.mseapp</groupId>
+            <artifactId>mes-api</artifactId>
+        </dependency>
+        <!-- 基座技术积木（starter-* 内部装配件：自动装配随 jar 走，工具本体经其传递带入） -->
+        <dependency>
+            <groupId>vip.mseapp</groupId>
+            <artifactId>starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>vip.mseapp</groupId>
+            <artifactId>starter-mybatis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>vip.mseapp</groupId>
+            <artifactId>starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>vip.mseapp</groupId>
+            <artifactId>starter-rpc</artifactId>
+        </dependency>
+        <!-- 按需启用 MQ（工具类型 common-mq 编译期 + boot 层引 mq-starter 装配）：
+        <dependency>
+            <groupId>vip.mseapp</groupId>
+            <artifactId>common-mq</artifactId>
+        </dependency>
+        -->
+        <!-- 按需启用 Seata：仅当本模块直接写 @GlobalTransactional 注解时编译期引入（运行期由 micro-starter 内置，
+             单体类路径无 seata 时该注解被 JVM 静默忽略、双注解退化为 @Transactional）：
+        <dependency>
+            <groupId>vip.mseapp</groupId>
+            <artifactId>starter-seata</artifactId>
+            <optional>true</optional>
+        </dependency>
+        -->
+        <!-- 基座契约积木：跨模块 RPC 唯一合法依赖 -->
+        <dependency>
+            <groupId>vip.mseapp</groupId>
+            <artifactId>api-tenant</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>vip.mseapp</groupId>
+            <artifactId>api-system</artifactId>
+        </dependency>
+        <!-- AI 平台契约（二期 AI 智能化）：正向对话/智能体选项 + 反向 RemoteAiTool 工具注册推送 -->
+        <dependency>
+            <groupId>vip.mseapp</groupId>
+            <artifactId>ai-api</artifactId>
+        </dependency>
+        <!-- 开放平台契约（二期系统集成）：OpenApiContributor 自注册开放能力到 mse-open 目录 -->
+        <dependency>
+            <groupId>vip.mseapp</groupId>
+            <artifactId>open-api</artifactId>
+        </dependency>
+        <!-- 通知中枢契约：工单完工 (mes,ORDER_FINISHED) 群发经 RemoteNotifyService 送框架中枢（渠道由租户路由解析） -->
+        <dependency>
+            <groupId>vip.mseapp</groupId>
+            <artifactId>api-notify</artifactId>
+        </dependency>
+        <!-- Spring AI 客户端 API：直连模式（无 mse-ai 平台）经 starter-ai 的 mseChatClient 调模型；版本走基座 BOM -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-client-chat</artifactId>
+        </dependency>
+        <!-- Excel 导入导出（主数据批量导入/导出/模板下载）；版本走基座 BOM -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+        </dependency>
+        <!-- Jackson 2：MesAiService 提示词上下文序列化（双轨知悉项，版本由 Boot 4 的 jackson-2-bom 托管）；
+             显式声明避免依赖 redisson 等上游传递，上游变化不连锁断编译 -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+    </dependencies>
+</project>

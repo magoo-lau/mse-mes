@@ -1,0 +1,74 @@
+# ==================== mse-mes 专属配置（Data ID: mse-mes.yaml    Group: DEFAULT_GROUP） ====================
+# 本文件是服务 application.yaml 的本地留档：经 init-configs.sh 写入 Nacos 后由配置中心管理，
+# 共享项（master 数据源/Redis/Sa-Token/MyBatis-Plus/Dubbo/租户开关/Seata）见 mse-micro-common/db/dubbo.yaml。
+server:
+  port: 8098
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,slowsql
+# actuator 鉴权令牌不在此处——共享 mse-micro-common.yaml 的 mse.actuator.auth.token
+# （${MSE_ACTUATOR_TOKEN:} 占位，空 = 关闭）已随 spring.config.import 覆盖本服务。
+
+# 未启用 Seata 前显式关闭动态数据源的 seata 集成（启用 Seata 时删除本行，
+# Seata 已随 micro-starter 内置（开启 MSE_SEATA_ENABLED 即用）；undo_log 在 jar 内 db/tenant 迁移脚本中随启动自动应用）
+spring:
+  datasource:
+    dynamic:
+      seata: false
+
+# ==================== 独立库租户数据源（可选） ====================
+# 推荐方式：平台端「平台管理 → 租户数据源」界面维护并绑定租户（shared 共享库多租户 / dedicated 一库一租户），
+# 运行时注册无需重启，本文件无需配置。下方为静态兼容方式示例（同 key 时界面维护的动态数据源优先）：
+# 平台端开通 ds_key=tenant2 的租户且实体标注 @TenantDatasource 时，该表读写路由至此库；
+# strict=false：租户 ds_key 未注册对应数据源时回落 master，等价共享库语义。
+# 独立库业务表不再需要手工建：界面初始化/懒初始化按 db/tenant 版本化脚本克隆+迁移自动就绪。
+# spring:
+#   datasource:
+#     dynamic:
+#       datasource:
+#         tenant2:
+#           driver-class-name: com.mysql.cj.jdbc.Driver
+#           url: jdbc:mysql://${MSE_MYSQL_HOST:localhost}:${MSE_MYSQL_PORT:3306}/mse_tenant2?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useInformationSchema=true&nullCatalogMeansCurrent=true
+#           username: ${MSE_MYSQL_USER:root}
+#           password: ${MSE_MYSQL_PASSWORD:123456}
+
+# ==================== RocketMQ（可选，启用 MQ 时放开） ====================
+# rocketmq:
+#   name-server: ${MSE_ROCKETMQ_ADDR:localhost:9876}
+#   producer:
+#     group: mse-producer
+#     send-message-timeout: 5000
+
+# ==================== 信创数据库切换（可选 profile，默认 MySQL 不受影响） ====================
+# master 数据源与方言由共享 mse-micro-db.yaml 的 dm/kingbase profile 提供，
+# 启动加 --spring.profiles.active=dm 或 kingbase 即切换；迁移脚本为 jar 内 db/tenant、db/base 对应方言目录（自动应用）。
+# 独立库租户对应段示例（MySQL 的 mse_tenant2 库 → 达梦 MSE_TENANT2 schema / 金仓独立 database）：
+# ---
+# spring:
+#   config:
+#     activate:
+#       on-profile: dm
+#   datasource:
+#     dynamic:
+#       datasource:
+#         tenant2:
+#           driver-class-name: dm.jdbc.driver.DmDriver
+#           url: jdbc:dm://${MSE_DM_HOST:localhost}:${MSE_DM_PORT:5236}?schema=MSE_TENANT2&characterEncoding=UTF-8
+#           username: ${MSE_DM_USER:SYSDBA}
+#           password: ${MSE_DM_PASSWORD:SYSDBA001}
+# ---
+# spring:
+#   config:
+#     activate:
+#       on-profile: kingbase
+#   datasource:
+#     dynamic:
+#       datasource:
+#         tenant2:
+#           driver-class-name: com.kingbase8.Driver
+#           url: jdbc:kingbase8://${MSE_KB_HOST:localhost}:${MSE_KB_PORT:54321}/${MSE_KB_DB_TENANT2:mse_tenant2}?currentSchema=mse_tenant2,public
+#           username: ${MSE_KB_USER:system}
+#           password: ${MSE_KB_PASSWORD:123456}
