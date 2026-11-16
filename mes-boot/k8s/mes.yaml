@@ -1,5 +1,5 @@
 # MES 制造执行系统：mes-boot（微服务形态：application.yaml 经 spring.config.import 接 Nacos 配置中心 + 注册，mse.rpc.mode=dubbo）
-# 部署前置：先执行 mse-modules/mse-mes/sql 建业务表；Nacos 就绪且 mse-mes.yaml 基线已导入（CONFIG_DIR 复用 init-configs.sh）；
+# 部署前置：业务表随服务启动自动迁移（mes-service db/mysql 版本化脚本）；Nacos 就绪且 mse-mes.yaml 基线已导入（CONFIG_DIR 复用 init-configs.sh）；
 # 共享环境变量复用 mse-framework/mse-boot/k8s/configmap.yaml（含 MSE_NACOS_ADDR，Pod 内经 Nacos 配置内容中的 MSE_* 占位符生效）
 apiVersion: apps/v1
 kind: Deployment

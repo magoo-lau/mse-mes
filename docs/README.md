@@ -7,7 +7,7 @@
 
 面向**多租户 SaaS** 的制造执行系统（Manufacturing Execution System）：承接生产计划，管理「计划 → 排产 → 派工 → 报工 → 检验 → 追溯 → 看板」的制造执行闭环，二期打通 ERP、引入 AI 智能化，三期叠加 IoT 数采与安灯/SPC。
 
-在本仓库中的形态：**mse-modules 业务工程**（独立 Maven 工程，不进根 pom 聚合），wujie 微前端子应用 + 微服务启动器，积木拼法与 mse-demo / mse-oa 一致：
+在本仓库中的形态：**独立业务工程仓**（自 ai-mse 单仓拆分，源 commit cc5410a3；独立 Maven 工程），wujie 微前端子应用 + 微服务启动器，积木拼法与 mse-demo / mse-oa 一致：
 
 - `mes-api`：跨服务 RPC 契约（含对外开放能力契约，经 mse-open 自注册接入）
 - `mes-service`：业务积木（SPI 自装配，Controller / Service / Mapper 随 jar 就绪）
@@ -25,12 +25,15 @@
 | [03-角色规划.md](03-角色规划.md) | 角色清单、角色 × 模块授权矩阵、数据权限（data_scope）设计、种子落库规划 | 后端 / 实施 |
 | [04-操作说明书/](04-操作说明书/README.md) | **分角色操作说明书**（总览 + 9 个岗位手册：系统管理员 / 计划员 / 调度员 / 车间主任 / 操作工 / 质检员 / 设备管理员 / 仓管员 / 管理层），含通用操作、状态字典与常见问题 | 最终用户 / 培训交付 |
 | [05-配置手册-零基础版.md](05-配置手册-零基础版.md) | **面向门外汉的部署配置指南**：名词卡、容器一键部署（单体）、租户/套餐/角色初始化、AI 开启、ERP 集成与 IoT 接入、微服务进阶、排查表与上线清单 | 实施 / 现场 IT |
+| [build-and-run.md](build-and-run.md) | 构建（build.sh/build-ui.sh）、本地运行（framework 仓基础设施）、镜像与 K8s | 开发 |
+| [verification.md](verification.md) | 回归验证要点（主链路/租户/AI/工程底线） | 测试 |
+| [../AGENTS.md](../AGENTS.md) | 协作约定（拼法/AI 接入/租户红线）与 [../docker/README.md](../docker/README.md) 镜像资产 | 开发 |
 
 阅读顺序：01 → 02 → 03。工程落地时 02/03 的表格即 SQL 种子的直接输入。**04 为面向最终用户的交付文档、05 为面向实施的零基础部署文档**，均以系统实际界面与配置为准。
 
 ## 三、资源分配规划（建议值）
 
-> ⚠️ 以下均为**规划值**，工程实际创建时按 `zcode-plugin/plugins/mse-dev/references/alloc-tables.md` 的登记纪律正式占用并回写该表（当前均未被占用，无冲突）。
+> ⚠️ 以下均为**规划值**，工程实际创建时已按 mse-agent-plugin 仓 `plugins/mse-dev/references/alloc-tables.md` 的登记纪律正式占用并回写该表（唯一登记处，跨仓共用）。
 
 | 资源 | 规划值 | 说明 |
 | --- | --- | --- |
@@ -75,4 +78,5 @@ mse-mes/
 2. **SQL 免手工执行**：业务表脚本（缺省 `-- mse-target: master`）随启动自动迁移；基座注册（头指令 `-- mse-target: base`）由 starter-bridge 自动推送（幂等版本化脚本，命名 `V{yyyyMMdd}_{NN}_mes__<描述>.sql`）。
 3. **权限点一律挂靠本工程 type=3 页面菜单**，参与角色授权分组与租户套餐裁剪；前端按钮用 `v-permission` 按权限码控制。
 4. **AI 能力走 AI 服务通道（mse-ai）**：正向 `ai-api` 的 `RemoteAiChatService`，反向 `RemoteAiTool` 门面工具；开关走 sys_config 参数 `mes.ai.mode`（详见 [01-功能规划](01-功能规划.md) 第十三节）。
-5. **资源用后登记**：工程创建时将第三节规划值正式登记到 `alloc-tables.md`。
+5. **资源用后登记**：资源占用回写 mse-agent-plugin 仓 `plugins/mse-dev/references/alloc-tables.md`（唯一登记处）。
+6. **跨仓构建顺序**：mse-framework 仓 → mse-modules 仓（ai-api/open-api）→ 本仓 → mse-sample 仓（最后）；本地运行与镜像见 [build-and-run.md](build-and-run.md)。

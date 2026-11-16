@@ -4,7 +4,7 @@
 # 无需宿主机预装 Maven/JDK）；ARG MODULE/PORT 按工程渲染注入
 #
 # 构建（context 必须是仓库根目录，能同时看到业务工程与基座模块）：
-#   docker build -f mse-modules/mse-mes/mes-boot/Dockerfile -t mse/mes-boot:1.0.0 .
+#   docker build -f mes-boot/Dockerfile -t mse/mes-boot:1.0.0 .
 #
 # 本地已 mvn package 想快速出镜像：mse-framework/mse-boot/Dockerfile.prebuilt（所有启动器通用）
 # =============================================================================
@@ -14,7 +14,7 @@ ARG RUNTIME_IMAGE=eclipse-temurin:21-jre-jammy
 
 # ---- 阶段 1：Maven 构建 ----
 FROM ${MAVEN_IMAGE} AS builder
-ARG MODULE=mse-modules/mse-mes/mes-boot
+ARG MODULE=mes-boot
 # 国内网络慢时可自行挂载加速配置，如：--build-arg MAVEN_ARGS="-s /path/settings.xml"
 ARG MAVEN_ARGS=""
 WORKDIR /build
