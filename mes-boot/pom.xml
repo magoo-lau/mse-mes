@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>vip.mseapp</groupId>
+        <groupId>com.github.magoo-lau.mse-mes</groupId>
         <artifactId>mse-mes</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
@@ -19,24 +19,24 @@
              （鉴权数据源 @SaCheckPermission / 独立库租户路由 / 操作日志 RPC 回退，本服务不打包基座 HTTP 接口）
              + Seata 内置（MSE_SEATA_ENABLED 开关）+ actuator + 三方言 JDBC 驱动 -->
         <dependency>
-            <groupId>vip.mseapp</groupId>
+            <groupId>com.github.magoo-lau.mse-framework</groupId>
             <artifactId>micro-starter</artifactId>
         </dependency>
         <!-- 自有业务积木 -->
         <dependency>
-            <groupId>vip.mseapp</groupId>
+            <groupId>com.github.magoo-lau.mse-mes</groupId>
             <artifactId>mes-service</artifactId>
         </dependency>
         <!-- 按需启用 MQ（装配入口；工具类型 common-mq 由 service 模块携带。同步：Nacos 配置 mse-mes.yaml）：
         <dependency>
-            <groupId>vip.mseapp</groupId>
+            <groupId>com.github.magoo-lau.mse-framework</groupId>
             <artifactId>mq-starter</artifactId>
         </dependency>
         -->
         <!-- AI 直连通道（可选）：系统参数 mes.ai.mode=direct/auto 回退时经 starter-ai mseChatClient 调模型；
              未配置 spring.ai.* 时零装配，不引则仅平台通道可用（版本走基座 BOM） -->
         <dependency>
-            <groupId>vip.mseapp</groupId>
+            <groupId>com.github.magoo-lau.mse-framework</groupId>
             <artifactId>starter-ai</artifactId>
             <optional>true</optional>
         </dependency>

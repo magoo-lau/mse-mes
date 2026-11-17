@@ -40,7 +40,7 @@ sh build-ui.sh mes-ui            # PC 子应用 --base=/sub-apps/mes/
 sh build-ui.sh mes-mobile-ui     # 移动子应用 --base=/m-apps/mes/
 ```
 
-UI 经 `file:../../mse-framework/mse-ui-shared` 源码直出（仓间同级摆放开箱可用）；dev proxy `/api` → 网关 48080。
+UI 的 mse-ui-shared 为 npm git 依赖（独立仓 `github:magoo-lau/mse-ui-shared#release/1.0.0`；根 .npmrc 已放行 allow-git，npm ci 原生安装）；dev proxy `/api` → 网关 48080。
 
 ## MQ / AI 依赖（可选）
 

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>vip.mseapp</groupId>
+        <groupId>com.github.magoo-lau.mse-mes</groupId>
         <artifactId>mse-mes</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
@@ -17,62 +17,62 @@
     <dependencies>
         <!-- 自有契约积木：对外 RPC 契约的实现方 -->
         <dependency>
-            <groupId>vip.mseapp</groupId>
+            <groupId>com.github.magoo-lau.mse-mes</groupId>
             <artifactId>mes-api</artifactId>
         </dependency>
         <!-- 基座技术积木（starter-* 内部装配件：自动装配随 jar 走，工具本体经其传递带入） -->
         <dependency>
-            <groupId>vip.mseapp</groupId>
+            <groupId>com.github.magoo-lau.mse-framework</groupId>
             <artifactId>starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>vip.mseapp</groupId>
+            <groupId>com.github.magoo-lau.mse-framework</groupId>
             <artifactId>starter-mybatis</artifactId>
         </dependency>
         <dependency>
-            <groupId>vip.mseapp</groupId>
+            <groupId>com.github.magoo-lau.mse-framework</groupId>
             <artifactId>starter-security</artifactId>
         </dependency>
         <dependency>
-            <groupId>vip.mseapp</groupId>
+            <groupId>com.github.magoo-lau.mse-framework</groupId>
             <artifactId>starter-rpc</artifactId>
         </dependency>
         <!-- 按需启用 MQ（工具类型 common-mq 编译期 + boot 层引 mq-starter 装配）：
         <dependency>
-            <groupId>vip.mseapp</groupId>
+            <groupId>com.github.magoo-lau.mse-framework</groupId>
             <artifactId>common-mq</artifactId>
         </dependency>
         -->
         <!-- 按需启用 Seata：仅当本模块直接写 @GlobalTransactional 注解时编译期引入（运行期由 micro-starter 内置，
              单体类路径无 seata 时该注解被 JVM 静默忽略、双注解退化为 @Transactional）：
         <dependency>
-            <groupId>vip.mseapp</groupId>
+            <groupId>com.github.magoo-lau.mse-framework</groupId>
             <artifactId>starter-seata</artifactId>
             <optional>true</optional>
         </dependency>
         -->
         <!-- 基座契约积木：跨模块 RPC 唯一合法依赖 -->
         <dependency>
-            <groupId>vip.mseapp</groupId>
+            <groupId>com.github.magoo-lau.mse-framework</groupId>
             <artifactId>api-tenant</artifactId>
         </dependency>
         <dependency>
-            <groupId>vip.mseapp</groupId>
+            <groupId>com.github.magoo-lau.mse-framework</groupId>
             <artifactId>api-system</artifactId>
         </dependency>
         <!-- AI 平台契约（二期 AI 智能化）：正向对话/智能体选项 + 反向 RemoteAiTool 工具注册推送 -->
         <dependency>
-            <groupId>vip.mseapp</groupId>
+            <groupId>com.github.magoo-lau.mse-modules</groupId>
             <artifactId>ai-api</artifactId>
         </dependency>
         <!-- 开放平台契约（二期系统集成）：OpenApiContributor 自注册开放能力到 mse-open 目录 -->
         <dependency>
-            <groupId>vip.mseapp</groupId>
+            <groupId>com.github.magoo-lau.mse-modules</groupId>
             <artifactId>open-api</artifactId>
         </dependency>
         <!-- 通知中枢契约：工单完工 (mes,ORDER_FINISHED) 群发经 RemoteNotifyService 送框架中枢（渠道由租户路由解析） -->
         <dependency>
-            <groupId>vip.mseapp</groupId>
+            <groupId>com.github.magoo-lau.mse-framework</groupId>
             <artifactId>api-notify</artifactId>
         </dependency>
         <!-- Spring AI 客户端 API：直连模式（无 mse-ai 平台）经 starter-ai 的 mseChatClient 调模型；版本走基座 BOM -->
